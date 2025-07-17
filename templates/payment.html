@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}
+Payment
+{% endblock title %}
+
+{% block head %}
+<h1><strong>Pay Now</strong></h1>
+
+<div class = "container mt-4">
+    <div class = "row">
+        <div class = "col-md-3"></div>
+        <div class = "col-md-6">
+            {% for message in messages %}
+            <div class = "alert alert-{{message.tags}} alert-dismissible fade show" role = "alert">
+                <strong></strong> {{message}}
+                <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
+            </div>
+            {% endfor %}
+            <form action="/payment" method="post">{% csrf_token %}
+                
+                <div class="form-group">
+                    <label for="plan" class="text-warning">Your Plan</label>
+                    <input type="text" class="form-control mt-2" name="plan" id="plan" value="{{plan}}" readonly required>
+                </div><br>
+                <div class="form-group">
+                    <label for="price" class="text-warning">To Pay</label>
+                    <input type="number" class="form-control mt-2" name="price" id="price" value="{{price}}" readonly required>
+                </div>
+                
+                <br>
+                <!-- Set up a container element for the button -->
+                <div id="paypal-button-container"></div>
+                <script src="https://www.paypal.com/sdk/js?client-id=AdyOcNSJL8oeEpCZiMaQ9x1YcHo-E2M_yI9JB0S5phsocT8WvOrBHJhpIXiVD0qFLphAKJvyvaP13gPJ&currency=USD"></script>
+
+                <script>
+                    paypal.Buttons({
+                        createOrder: function(data, actions) {
+                            return actions.order.create({
+                                purchase_units: [{
+                                    amount: {
+                                        value: '{{price}}'
+                                    }
+                                }]
+                            });
+                        },
+
+                        onApprove: function(data, actions) {
+                            return actions.order.capture().then(function(details) {
+                                alert('Transaction completed by ' + details.payer.name.given_name + '!');
+                            });
+                        }
+                    }).render('#paypal-button-container');
+                </script>
+            </form>
+        </div>
+        <div class = "col-md-3"></div>
+    </div>
+</div>
+{% endblock head %}
+

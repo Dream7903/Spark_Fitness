@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}
+Attendance
+{% endblock title %}
+
+{% block head %}
+<h1><strong>Mark your Attendance</strong></h1>
+
+<div class = "container mt-4">
+    <div class = "row">
+        <div class = "col-md-3"></div>
+        <div class = "col-md-6">
+            {% for message in messages %}
+            <div class = "alert alert-{{message.tags}} alert-dismissible fade show" role = "alert">
+                <strong></strong> {{message}}
+                <button type = "button" class = "btn-close" data-bs-dismiss = "alert" aria-label = "Close"></button>
+            </div>
+            {% endfor %}
+            <form action="/attendance" method="post">{% csrf_token %}
+                {% for enroll in Enroll %}
+                <div class="form-group">
+                    <input type="text" class="form-control mt-2" name="fullname" value="{{enroll.FullName}}" placeholder="Enter your Name" readonly required>
+                </div>
+                <div class="form-group">
+                    <input type="number" class="form-control mt-2" name="phonenumber" value="{{enroll.PhoneNumber}}" placeholder="Enter your Phone Number" readonly required>
+                </div>
+                {% endfor %}
+                <div class="form-group">
+                    <select class="form-control mt-2" id="workout" name="workout" required>
+                        <option selected>Select Workout</option>
+                        <option value="Chest">Chest</option>
+                        <option value="Back">Back</option>
+                        <option value="Core">Core</option>
+                        <option value="Biceps">Biceps</option>
+                        <option value="Triceps">Triceps</option>
+                        <option value="Shoulders">Shoulders</option>
+                        <option value="Legs">Legs</option>
+                        <option value="Cardio">Cardio</option>
+                        <option value="HIIT">HIIT</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="logintime" class="text-white">Login Time</label>
+                    <input type="time" class="form-control mt-2" id="logintime" name="logintime" placeholder="Login Time" required>
+                </div>
+                <div class="form-group">
+                    <label for="logouttime" class="text-white">Logout Time</label>
+                    <input type="time" class="form-control mt-2" id="logouttime" name="logouttime" placeholder="Logout Time" required>
+                </div>
+                <div class="form-group">
+                    <select class="form-control mt-2" id="trainer" name="trainer" required>
+                        <option selected>Trained by</option>
+                        {% for t in SelectTrainer %}
+                        <option value="{{t.Name}}">{{t.Name}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-warning">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class = "col-md-3"></div>
+    </div>
+</div>
+{% endblock head %}

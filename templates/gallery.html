@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}
+Gallery
+{% endblock title %}
+
+{% block body %}
+
+<div class="container mt-2">
+    <center><h2>Gallery</h2></center>
+    <div class="row">
+        {% for post in posts %}
+        <div class="col-md-4">
+            <div class="card">
+                <img src="{{post.img.url}}" class="card-img-top" alt="">
+                <div class="card-body">
+                    <center><h5 class="card-title">{{post.title}}</h5></center>
+                    <p class="card-text">Uploaded on : {{post.timestamp}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock body %}
+
